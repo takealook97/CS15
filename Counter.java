@@ -1,13 +1,15 @@
-import java.sql.*;
-import java.text.ParseException;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
 
 public class Counter {
-    int pcNumber;
-    int userNumber;
+    static int pcNumber;
+    static int userNumber;
     static ArrayList<Integer> emptySeats;
     static ArrayList<Integer> waitingUsers;
 
@@ -60,7 +62,7 @@ public class Counter {
         PCRoom.con.commit();
     }
 
-    public void addStartTime() throws SQLException, ParseException {
+    public void addStartTime() throws SQLException {
         String timeSQL = "INSERT INTO time(pc_number, user_number, start_time, end_time) VALUES (?, ?, ?, ?)";
         PreparedStatement timePst = PCRoom.con.prepareStatement(timeSQL);
         timePst.setInt(1, pcNumber);
@@ -75,10 +77,10 @@ public class Counter {
         //종료시각 추가
     }
 
-    public String dateTime() throws ParseException {
+    public String dateTime() {
         Date date = new Date();
-        String date_time = date.toString();
-        SimpleDateFormat dateParser = new SimpleDateFormat("YYYY-MM-DD HH:MM:SS");
-        return dateParser.parse(date_time).toString();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String str = format.format(date);
+        return str;
     }
 }

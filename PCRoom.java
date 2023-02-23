@@ -14,7 +14,6 @@ public class PCRoom {
         PreparedStatement timePst = null;
         String pcSQL = "INSERT INTO pc(id, pc_number) VALUES (?, ?)";
         String userSQL = "INSERT INTO user(id, user_number) VALUES (?, ?)";
-        String timeSQL = "INSERT INTO time(id, start_time, end_time) VALUES (?, ?, ?)";
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -51,9 +50,10 @@ public class PCRoom {
                     }
                     case "stop" -> {
                         counter.stop(Integer.parseInt(input[1]));
-                        output.printEmptyMessage(counter.pcNumber);
+                        output.printEmptyMessage(Counter.pcNumber);
                     }
-                    case "close" -> System.exit(0);
+                    case "close" -> new DBClean().cleanDB();
+
                     default -> output.printError();
                 }
             }
