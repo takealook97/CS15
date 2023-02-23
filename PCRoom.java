@@ -16,21 +16,21 @@ public class PCRoom {
         String timeSQL = "INSERT INTO time(id, start_time, end_time) VALUES (?, ?, ?)";
 
         try {
-//            Class.forName("com.mysql.cj.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             con = DriverManager.getConnection(url, userName, password);
-//            con.setAutoCommit(false);
+            con.setAutoCommit(false);
             userPst = con.prepareStatement(userSQL);
             pcPst = con.prepareStatement(pcSQL);
             timePst = con.prepareStatement(timeSQL);
-            for (int i = 1; i <= 2; i++) {
-                for (int j = 1; j <= 16; j++) {
-                    pcPst.setInt(i, j);
-                    userPst.setInt(i, j);
-                    pcPst.executeUpdate();
-                    userPst.executeUpdate();
-                }
+            for (int i = 1; i <= 16; i++) {
+                pcPst.setInt(1, i);
+                pcPst.setInt(2, i);
+                pcPst.executeUpdate();
+                userPst.setInt(1, i);
+                userPst.setInt(2, i);
+                userPst.executeUpdate();
+                con.commit();
             }
-
 
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             Output output = new Output();
@@ -45,7 +45,6 @@ public class PCRoom {
                         counter.getPcNumber();
                         counter.getUserNumber();
                         output.printOrder(counter.PcNumber, counter.UserNumber);
-
                     }
                     case "stop" -> {
                         counter.stop(Integer.parseInt(input[1]));
@@ -56,7 +55,7 @@ public class PCRoom {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace(); // Add this line to print the full stack trace
+            e.printStackTrace();
             try {
                 if (con != null) {
                     con.rollback();
@@ -66,17 +65,14 @@ public class PCRoom {
             } finally {
                 if (userPst != null) try {
                     userPst.close();
-                    userPst = null;
                 } catch (SQLException ex) {
                 }
                 if (pcPst != null) try {
                     pcPst.close();
-                    pcPst = null;
                 } catch (SQLException ex) {
                 }
                 if (con != null) try {
                     con.close();
-                    con = null;
                 } catch (SQLException ex) {
                 }
             }
