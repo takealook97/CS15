@@ -5,7 +5,7 @@ import java.sql.*;
 public class PCRoom {
     static Connection con;
 
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) {
         String url = "jdbc:mysql://localhost:3306/pc_room_db";
         String userName = "takealook";
         String password = "0205";
@@ -45,15 +45,15 @@ public class PCRoom {
                     case "new" -> {
                         output.printSeatAndUser();
                         counter.deleteField();
-                        counter.addStartTime();
+                        new DateTime().addStartTime();
                         output.printEmptySeats();
                     }
                     case "stop" -> {
-                        counter.stop(Integer.parseInt(input[1]));
-                        output.printEmptyMessage(Counter.pcNumber);
+                        counter.stopPC(Integer.parseInt(input[1]));
+                        output.printEmptyMessage();
+                        output.printEmptySeats();
                     }
                     case "close" -> new DBClean().cleanDB();
-
                     default -> output.printError();
                 }
             }

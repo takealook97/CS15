@@ -2,9 +2,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Collections;
 import java.util.Random;
 
 public class Counter {
@@ -20,6 +19,7 @@ public class Counter {
         while (rs.next()) {
             emptySeats.add(rs.getInt("pc_number"));
         }
+        Collections.sort(emptySeats);
         return emptySeats;
     }
 
@@ -30,6 +30,7 @@ public class Counter {
         while (rs.next()) {
             waitingUsers.add(rs.getInt("user_number"));
         }
+        Collections.sort(waitingUsers);
     }
 
     public int getPcNumber() {
@@ -62,25 +63,35 @@ public class Counter {
         PCRoom.con.commit();
     }
 
-    public void addStartTime() throws SQLException {
-        String timeSQL = "INSERT INTO time(pc_number, user_number, start_time, end_time) VALUES (?, ?, ?, ?)";
-        PreparedStatement timePst = PCRoom.con.prepareStatement(timeSQL);
-        timePst.setInt(1, pcNumber);
-        timePst.setInt(2, userNumber);
-        timePst.setString(3, dateTime());
-        timePst.setString(4, null);
-        timePst.executeUpdate();
+
+    public void stopPC(int user) throws SQLException {
+        //유저와 pc 지정 및 list에 원상복귀
+        Statement stmt = PCRoom.con.createStatement();
+        ResultSet rs = stmt.executeQuery("select * from time");
+        userNumber = user;
+        while (rs.next()) {
+            if (userNumber == rs.getInt("user_number")) {
+                pcNumber = rs.getInt("pc_number");
+            }
+        }
+        emptySeats.add(pcNumber);
+        waitingUsers.add(userNumber);
+
+        //유저와 pc 테이블에 원상복귀
+        String pcSQL = "INSERT INTO pc(id, pc_number) VALUES (?, ?)";
+        String userSQL = "INSERT INTO user(id, user_number) VALUES (?, ?)";
+        PreparedStatement userPst = PCRoom.con.prepareStatement(userSQL);
+        PreparedStatement pcPst = PCRoom.con.prepareStatement(pcSQL);
+        pcPst.setInt(1, pcNumber);
+        pcPst.setInt(2, pcNumber);
+        pcPst.executeUpdate();
+        userPst.setInt(1, userNumber);
+        userPst.setInt(2, userNumber);
+        userPst.executeUpdate();
         PCRoom.con.commit();
+
+        new DateTime().addEndTime();
     }
 
-    public void stop(int user) {
-        //종료시각 추가
-    }
 
-    public String dateTime() {
-        Date date = new Date();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String str = format.format(date);
-        return str;
-    }
 }
