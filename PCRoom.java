@@ -3,11 +3,12 @@ import java.io.InputStreamReader;
 import java.sql.*;
 
 public class PCRoom {
+    static Connection con;
+
     public static void main(String[] args) throws SQLException {
         String url = "jdbc:mysql://localhost:3306/pc_room_db";
         String userName = "takealook";
         String password = "0205";
-        Connection con = null;
         PreparedStatement userPst = null;
         PreparedStatement pcPst = null;
         PreparedStatement timePst = null;
@@ -21,7 +22,7 @@ public class PCRoom {
             con.setAutoCommit(false);
             userPst = con.prepareStatement(userSQL);
             pcPst = con.prepareStatement(pcSQL);
-            timePst = con.prepareStatement(timeSQL);
+
             for (int i = 1; i <= 16; i++) {
                 pcPst.setInt(1, i);
                 pcPst.setInt(2, i);
@@ -36,19 +37,21 @@ public class PCRoom {
             Output output = new Output();
             Counter counter = new Counter();
             output.printInit();
+            output.printEmptySeats();
 
             while (true) {
                 System.out.print("> ");
                 String[] input = br.readLine().split(" ");
                 switch (input[0]) {
                     case "new" -> {
-                        counter.getPcNumber();
-                        counter.getUserNumber();
-                        output.printOrder(counter.PcNumber, counter.UserNumber);
+                        output.printSeatAndUser();
+                        counter.deleteField();
+                        counter.addStartTime();
+                        output.printEmptySeats();
                     }
                     case "stop" -> {
                         counter.stop(Integer.parseInt(input[1]));
-                        output.printEmptyMessage(counter.PcNumber);
+                        output.printEmptyMessage(counter.pcNumber);
                     }
                     case "close" -> System.exit(0);
                     default -> output.printError();
