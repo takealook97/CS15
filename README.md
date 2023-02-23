@@ -45,12 +45,16 @@
 - start_time & end_time
 
 ### 1. db 생성 및 지정
-![image](https://user-images.githubusercontent.com/118447769/220814396-7e5ed269-8d91-4988-817c-c05b43461a56.png)
+![image](https://user-images.githubusercontent.com/118447769/220831937-089e615c-085c-4ce0-b496-b7db3fa2367a.png)  
 
 ### 2. 테이블 생성
 - user 테이블, pc 테이블, time 테이블 3가지 생성
 - user, pc_number 는 null 값 지정이 불가능하기에 PRIMARY KEY 제한조건을 걸어주었다.
 - time 테이블 중 시작 시간은 null 값 지정이 불가능하기에 PRIMARY KEY로 지정해주었고 종료시간은 null값이 가능하기에 지정하지 않았다.
 
-![image](https://user-images.githubusercontent.com/118447769/220814639-8e196e35-be24-4220-8014-4028c67a8eeb.png)
-![image](https://user-images.githubusercontent.com/118447769/220814728-62b765e5-3067-4182-9d38-6eb76a0fb248.png)
+![image](https://user-images.githubusercontent.com/118447769/220831990-c89b995f-52d4-4e20-81dd-ee41f564d2c5.png)  
+![image](https://user-images.githubusercontent.com/118447769/220832012-b4b5f383-6119-4caf-903b-f37125928faa.png)  
+
+
+
+
