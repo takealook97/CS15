@@ -55,6 +55,28 @@
 ![image](https://user-images.githubusercontent.com/118447769/220831990-c89b995f-52d4-4e20-81dd-ee41f564d2c5.png)  
 ![image](https://user-images.githubusercontent.com/118447769/220832012-b4b5f383-6119-4caf-903b-f37125928faa.png)  
 
+### 3. 빈 자리 list
+참고 : https://m.blog.naver.com/PostView.naver?isHttpsRedirect=true&blogId=50after&logNo=220917018940
+
+```java
+public ArrayList getEmptySeats() throws SQLException {
+    Statement stmt = PCRoom.con.createStatement();
+    ResultSet rs = stmt.executeQuery("select * from pc");
+    emptySeats = new ArrayList<>();
+    while(rs.next()){
+        emptySeat.add(rs.getInt("pc_number"));
+    }
+    return emptySeat;
+}
+```
+- Statement 타입 선언 후 pc를 기준으로 result set 을 가져온다.
+- 반복문을 돌며 list에 pc_number column을 넣어준다 (= pc 번호 = pc 이름)
+- list를 리턴한다.
 
 
+### 시간 변환(SimpleDateFormat)
+참고 : https://readystory.tistory.com/55
 
+
+### autoincrement
+https://cogito87.tistory.com/73
